@@ -1,16 +1,19 @@
-MODULE BinMat;
+MODULE Matrix;
 
-CONST DIM*=5;
+CONST DIM*=3;
 
 TYPE Index*=ARRAY DIM OF LONGINT;
-     Element*=BOOLEAN;
+     Element*=INTEGER;
      
-VAR matrix: POINTER TO ARRAY OF SET;
+VAR matrix: POINTER TO ARRAY OF INTEGER;
     upperBoundary, lowerBoundary, dope: Index;
 
 
-PROCEDURE GetAddress(inx: Index): LONGINT;
-  
+PROCEDURE GetAddress*(inx: Index): LONGINT;
+
+(* GetAddress wird exportiert, um die Überprüfung der Suche nach Elementen
+   in der Matrix im Testmodul zu ermöglichen - siehe dort *)
+     
 VAR address, i: LONGINT;
     err: BOOLEAN;
     
@@ -88,7 +91,7 @@ BEGIN
   err:=FALSE;
   i:=DIM-1;
   dope[DIM-1]:=1;
-  
+
   REPEAT
     IF upBnd[i]>=loBnd[i] THEN
       upperBoundary[i]:=upBnd[i];
@@ -103,40 +106,48 @@ BEGIN
   UNTIL (i<0) OR (err);
   
   IF ~err THEN
-    NEW(matrix,MatrixSize() DIV (MAX(SET)+1)+1);
-    err:=(matrix=NIL);
+    NEW(matrix,MatrixSize());
   END;
 END Init;
   
 
-PROCEDURE Get*(inx: Index): BOOLEAN;
-
-VAR address: LONGINT;
+PROCEDURE Get*(inx: Index; VAR ele: Element);
 
 BEGIN
   IF matrix#NIL THEN
-    address:=GetAddress(inx);
-    RETURN (address MOD (MAX(SET)+1) IN matrix^[address DIV (MAX(SET)+1)]);
-  ELSE
-    RETURN FALSE;
-  END;
+    ele:=matrix^[GetAddress(inx)];
+  END
 END Get;
 
 
-PROCEDURE Put*(inx: Index; ele: BOOLEAN);
-
-VAR address: LONGINT;
+PROCEDURE Put*(inx: Index; ele: Element);
 
 BEGIN
   IF matrix#NIL THEN
-    address:=GetAddress(inx);
-    IF ele THEN
-      matrix^[address DIV (MAX(SET)+1)]:=matrix^[address DIV (MAX(SET)+1)]+{(address MOD (MAX(SET)+1))};
-    ELSE
-      matrix^[address DIV (MAX(SET)+1)]:=matrix^[address DIV (MAX(SET)+1)]-{(address MOD (MAX(SET)+1))};
-    END;
+    matrix^[GetAddress(inx)]:=ele;
   END
 END Put;
 
 
-END BinMat.
+PROCEDURE Find*(VAR outx: Index; VAR found: BOOLEAN; ele: Element);
+
+VAR i: LONGINT;
+
+BEGIN
+  found:=FALSE;
+  
+  IF matrix#NIL THEN
+    i:=0;
+
+    REPEAT
+      IF matrix^[i]=ele THEN
+        GetIndex(i,outx);
+        found:=TRUE;
+      END;
+      INC(i);
+    UNTIL (i=MatrixSize()) OR (found);
+  END;
+END Find;
+
+
+END Matrix.
