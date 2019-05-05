@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Object Mapping DTD Version 1.0//EN"
+                         "mapping.dtd">
+
+<mapping>
+        <class name="at.ac.uni_linz.tk.webstyles.xml.XMLGraph">
+                <map-to xml="Graph"/>
+
+                <field name="Node"
+                       type="at.ac.uni_linz.tk.webstyles.xml.XMLNode"
+                          collection="vector"
+                          get-method="getNodes">
+                </field>
+
+                <field name="Link"
+                       type="at.ac.uni_linz.tk.webstyles.xml.XMLLink"
+                          collection="vector"
+                          get-method="getLinks">
+                </field>
+        </class>
+
+        <class name="at.ac.uni_linz.tk.webstyles.xml.XMLNode" identity="id">
+                <map-to xml="Node"/>
+
+                <field name="name"
+                       type="java.lang.String">
+                        <bind-xml name="Name" node="element"/>
+                </field>
+
+                <field name="id"
+                       type="integer">
+                        <bind-xml name="Id" node="element"/>
+                </field>
+
+                <field name="Property"
+                       get-method ="getProperties"
+                       type="at.ac.uni_linz.tk.webstyles.xml.XMLProperty"
+                       collection="vector">
+                </field>
+                
+                <field name="Content"
+                       type="at.ac.uni_linz.tk.webstyles.xml.memory.XMLMemory">
+                        <bind-xml name="Content" node="element"/>
+                </field>
+
+        </class>
+
+        <class name="at.ac.uni_linz.tk.webstyles.xml.XMLLink" identity="id">
+                <map-to xml="Link"/>
+
+                <field name="id"
+                       type="integer">
+                        <bind-xml name="Id" node="element"/>
+                </field>
+
+                <field name="name"
+                       type="java.lang.String">
+                        <bind-xml name="Name" node="element"/>
+                </field>
+
+                <field name="SourceNodeId"
+                       type="integer">
+                        <bind-xml name="SourceNodeId" node="element"/>
+                </field>
+                
+                <field name="TargetNodeId"
+                        type="integer">
+                        <bind-xml name="TargetNodeId" node="element"/>
+                </field>
+                
+                <field name="Property"
+                       get-method ="getProperties"
+                       type="at.ac.uni_linz.tk.webstyles.xml.XMLProperty"
+                       collection="vector">
+                </field>
+
+        </class>
+        
+        <class name="at.ac.uni_linz.tk.webstyles.xml.XMLProperty">
+                <map-to xml="XMLProperty"/>
+                <field name="key" direct="true">
+                </field>
+                <field name="value" direct="true">
+                </field>
+        </class>
+        
+        <class name="at.ac.uni_linz.tk.webstyles.xml.memory.XMLMemory">
+                <map-to xml="XMLMemory"/>
+                <field name="name">
+                    <bind-xml name="Name" node="element"/>
+                </field>
+                <field name="width">
+                    <bind-xml name="Width" node="element"/>
+                </field>
+                <field name="height">
+                    <bind-xml name="Height" node="element"/>
+                </field>
+                <field name="Pair"
+                       get-method ="getPairs"
+                       type="at.ac.uni_linz.tk.webstyles.xml.memory.XMLMemoryPair"
+                       collection="vector">
+                </field>
+        </class>
+        
+        <class name="at.ac.uni_linz.tk.webstyles.xml.memory.XMLMemoryPair">
+                <map-to xml="XMLMemoryPair"/>
+                <field name="card1">
+                </field>
+                <field name="card2">
+                </field>
+        </class>
+
+</mapping>
+            
